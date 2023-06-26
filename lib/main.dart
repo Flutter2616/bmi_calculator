@@ -11,7 +11,7 @@ void main() {
     Sizer(
       builder:(context, orientation, deviceType) => GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: "home",
+        // initialRoute: "home",
         routes: {
           '/':(p0) => Splashscreen(),
           'home':(context) => Homescreen(),
