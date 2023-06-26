@@ -23,12 +23,10 @@ class _HomescreenState extends State<Homescreen>
   void initState() {
     super.initState();
     animationController =
-        AnimationController(vsync: this, duration: Duration(seconds: 3));
-    genderanimation = Tween<Alignment>(
-            begin: Alignment.bottomCenter, end: Alignment.topCenter)
+        AnimationController(vsync: this, duration: Duration(seconds: 3),);
+    genderanimation = Tween<Alignment>(begin: Alignment(-40,0), end: Alignment(0,0))
         .animate(animationController!);
-    ageanimation = Tween<Alignment>(
-            begin: Alignment.topCenter, end: Alignment.bottomCenter)
+    ageanimation = Tween<Alignment>(begin: Alignment(40,0), end: Alignment(0,0))
         .animate(animationController!);
     animationController!.forward();
     animationController!.addListener(() {setState(() {
@@ -73,93 +71,105 @@ class _HomescreenState extends State<Homescreen>
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  InkWell(
-                    onTap: () {
-                      if (bmi.male == false) {
-                        bmi.male.value = true;
-                        bmi.female.value = false;
-                      }
-                    },
-                    child: gender(
-                        "Male",
-                        Obx(
-                          () => Icon(Icons.male,
-                              color: bmi.male.value == true
-                                  ? Colors.pink
-                                  : Colors.white,
-                              size: 30.sp),
-                        ),
-                        bmi.male),
+                  Expanded(
+                    child: Align(alignment: genderanimation!.value,
+                      child: InkWell(
+                        onTap: () {
+                          if (bmi.male == false) {
+                            bmi.male.value = true;
+                            bmi.female.value = false;
+                          }
+                        },
+                        child: gender(
+                            "Male",
+                            Obx(
+                              () => Icon(Icons.male,
+                                  color: bmi.male.value == true
+                                      ? Colors.pink
+                                      : Colors.white,
+                                  size: 30.sp),
+                            ),
+                            bmi.male),
+                      ),
+                    ),
                   ),
-                  InkWell(
-                    onTap: () {
-                      if (bmi.female == false) {
-                        bmi.male.value = false;
-                        bmi.female.value = true;
-                      }
-                    },
-                    child: gender(
-                        "Female",
-                        Obx(
-                          () => Icon(Icons.female,
-                              color: bmi.female == true
-                                  ? Colors.pink
-                                  : Colors.white,
-                              size: 30.sp),
-                        ),
-                        bmi.female),
+                  Expanded(
+                    child: Align(
+                      alignment: ageanimation!.value,
+                      child: InkWell(
+                        onTap: () {
+                          if (bmi.female == false) {
+                            bmi.male.value = false;
+                            bmi.female.value = true;
+                          }
+                        },
+                        child: gender(
+                            "Female",
+                            Obx(
+                              () => Icon(Icons.female,
+                                  color: bmi.female == true
+                                      ? Colors.pink
+                                      : Colors.white,
+                                  size: 30.sp),
+                            ),
+                            bmi.female),
+                      ),
+                    ),
                   ),
                 ],
               ),
               Spacer(),
-              Container(
-                height: 20.h,
-                width: 100.w,
-                padding: EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                    color: Colors.indigo.shade400,
-                    borderRadius: BorderRadius.circular(20)),
-                alignment: Alignment.center,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("HEIGHT",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 15.sp)),
-                    SizedBox(height: 10),
-                    Obx(
-                      () => Text(
-                        "${bmi.height.value.toInt()}cm",
-                        style: TextStyle(
-                            fontSize: 25.sp,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white),
+              Align(
+                alignment: genderanimation!.value,
+                child: Container(
+                  height: 20.h,
+                  width: 100.w,
+                  padding: EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                      color: Colors.indigo.shade400,
+                      borderRadius: BorderRadius.circular(20)),
+                  alignment: Alignment.center,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("HEIGHT",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15.sp)),
+                      SizedBox(height: 10),
+                      Obx(
+                        () => Text(
+                          "${bmi.height.value.toInt()}cm",
+                          style: TextStyle(
+                              fontSize: 25.sp,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white),
+                        ),
                       ),
-                    ),
-                    Spacer(),
-                    Obx(
-                      () => Slider(
-                        value: bmi.height.value,
-                        max: 200,
-                        onChanged: (value) {
-                          bmi.height.value = value;
-                        },
-                        thumbColor: Colors.pink,
-                        activeColor: Colors.pink.shade200,
-                        inactiveColor: Colors.grey.shade400,
+                      Spacer(),
+                      Obx(
+                        () => Slider(
+                          value: bmi.height.value,
+                          max: 200,
+                          onChanged: (value) {
+                            bmi.height.value = value;
+                          },
+                          thumbColor: Colors.pink,
+                          activeColor: Colors.pink.shade200,
+                          inactiveColor: Colors.grey.shade400,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               Spacer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  add_remove("WEIGHT", bmi.weight),
-                  add_remove("AGE", bmi.age),
+                  Expanded(child: Align(alignment: genderanimation!.value,child: add_remove("WEIGHT", bmi.weight))),
+                  Expanded(child: Align(alignment: ageanimation!.value,child: add_remove("AGE", bmi.age))),
                 ],
               ),
               Spacer(),
